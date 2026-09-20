@@ -5,7 +5,23 @@ app = Flask(__name__)
 _next = 1
 
 BOOKS = [
-    {"id": 1, "title": "Clean Code", "author": "R. Martin"}
+    {
+  "id": 1,
+  "title": "Clean Code",
+  "author": "R. Martin",
+  "year": 2008
+},{
+        "id": 2,
+        "title": "Designing Data-Intensive Applications",
+        "author": "Martin Kleppmann",
+        "year": 2017
+    },
+    {
+        "id": 3,
+        "title": "The Pragmatic Programmer",
+        "author": "Andrew Hunt",
+        "year": 1999
+    }
 ]
 
 
