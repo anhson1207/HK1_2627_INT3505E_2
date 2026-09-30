@@ -6,12 +6,12 @@ POSTS = [
     {"id": 1, "title": "Bai viet 1", "content": "Noi dung 1"}
 ]
 
-# 1. Lay danh sach posts
+
 @app.get("/posts")
 def get_posts():
     return jsonify(POSTS), 200
 
-# 2. Tao post moi
+
 @app.post("/posts")
 def create_post():
     data = request.json or {}
@@ -23,7 +23,7 @@ def create_post():
     POSTS.append(new_post)
     return jsonify(new_post), 201
 
-# 3. Xem chi tiet post
+
 @app.get("/posts/<int:pid>")
 def get_post(pid):
     post = next((p for p in POSTS if p["id"] == pid), None)
