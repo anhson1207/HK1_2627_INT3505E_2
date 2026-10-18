@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Create physical book copy request",
+  "type": "object",
+  "required": [
+    "barcode"
+  ],
+  "properties": {
+    "barcode": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 32
+    },
+    "condition": {
+      "enum": [
+        "available",
+        "maintenance"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

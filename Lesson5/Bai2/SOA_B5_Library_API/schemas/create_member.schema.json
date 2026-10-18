@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Create Member request",
+  "type": "object",
+  "required": [
+    "fullName",
+    "email"
+  ],
+  "properties": {
+    "fullName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 255
+    }
+  },
+  "additionalProperties": false
+}

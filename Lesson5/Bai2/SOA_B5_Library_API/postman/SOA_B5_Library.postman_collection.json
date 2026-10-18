@@ -1,0 +1,627 @@
+{
+  "info": {
+    "name": "SOA B5 - Library API (Bai 1 + Bai 2)",
+    "description": "Run seed.py first. For a full collection run, start from a clean database. Book CRUD, author pairing, borrowing, and offset/cursor sort demos.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Genres",
+      "item": [
+        {
+          "name": "01 - GET genres",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/genres",
+            "description": "Library SOA homework: 01 - GET genres"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Books",
+      "item": [
+        {
+          "name": "02 - GET books (offset + multi-sort)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/books?strategy=offset&limit=3&offset=0&genre=technology&sort=-publication_year%2Ctitle",
+            "description": "Library SOA homework: 02 - GET books (offset + multi-sort)"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 - GET books cursor page 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/books?strategy=cursor&limit=2&genre=technology&sort=-publication_year%2Ctitle",
+            "description": "Library SOA homework: 03 - GET books cursor page 1"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });",
+                  "const body = pm.response.json(); pm.collectionVariables.set('nextCursor', body.pagination.nextCursor || ''); pm.test('cursor included', () => pm.expect(body.pagination.nextCursor).to.be.a('string')); "
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 - GET books cursor page 2",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/books?strategy=cursor&limit=2&genre=technology&sort=-publication_year%2Ctitle&cursor={{nextCursor}}",
+            "description": "Library SOA homework: 04 - GET books cursor page 2"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 - POST books",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/books",
+            "description": "Library SOA homework: 05 - POST books",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"SOA Hands-on\",\n  \"isbn\": \"9780000000101\",\n  \"genreId\": 1,\n  \"publicationYear\": 2026,\n  \"description\": \"Homework example\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });",
+                  "pm.collectionVariables.set('createdBookId', pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06 - GET book by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/books/1",
+            "description": "Library SOA homework: 06 - GET book by ID"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07 - PATCH book",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/books/{{createdBookId}}",
+            "description": "Library SOA homework: 07 - PATCH book",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"SOA Hands-on (updated)\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08 - DELETE book",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/books/{{createdBookId}}",
+            "description": "Library SOA homework: 08 - DELETE book"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Books - Authors",
+      "item": [
+        {
+          "name": "09 - GET authors of book",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/books/1/authors",
+            "description": "Library SOA homework: 09 - GET authors of book"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10 - POST link author to book",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/books/2/authors",
+            "description": "Library SOA homework: 10 - POST link author to book",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"authorId\": 3,\n  \"role\": \"co\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "11 - DELETE author-book link",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/books/2/authors/3",
+            "description": "Library SOA homework: 11 - DELETE author-book link"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Authors",
+      "item": [
+        {
+          "name": "12 - GET authors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/authors?limit=10",
+            "description": "Library SOA homework: 12 - GET authors"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "13 - POST author",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/authors",
+            "description": "Library SOA homework: 13 - POST author",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sample Writer\",\n  \"bio\": \"New author\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14 - GET books of author",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/authors/1/books",
+            "description": "Library SOA homework: 14 - GET books of author"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Copies",
+      "item": [
+        {
+          "name": "15 - GET book copies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/books/1/copies",
+            "description": "Library SOA homework: 15 - GET book copies"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "16 - POST book copy",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/books/2/copies",
+            "description": "Library SOA homework: 16 - POST book copy",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"barcode\": \"SOA-COPY-101\",\n  \"condition\": \"available\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });",
+                  "pm.collectionVariables.set('createdCopyId', pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Members",
+      "item": [
+        {
+          "name": "17 - GET members",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/members",
+            "description": "Library SOA homework: 17 - GET members"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18 - POST member",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/members",
+            "description": "Library SOA homework: 18 - POST member",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"SOA Tester\",\n  \"email\": \"soa.tester@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });",
+                  "pm.collectionVariables.set('createdMemberId', pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "19 - GET member by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/members/1",
+            "description": "Library SOA homework: 19 - GET member by ID"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "20 - GET loans for member",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/members/1/loans",
+            "description": "Library SOA homework: 20 - GET loans for member"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Loans",
+      "item": [
+        {
+          "name": "21 - POST loan",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/loans",
+            "description": "Library SOA homework: 21 - POST loan",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"memberId\": 1,\n  \"copyId\": {{createdCopyId}},\n  \"dueAt\": \"2099-01-01T00:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });",
+                  "pm.collectionVariables.set('createdLoanId', pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "22 - PATCH return loan",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/loans/{{createdLoanId}}",
+            "description": "Library SOA homework: 22 - PATCH return loan",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"return\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP success', function () { pm.expect(pm.response.code).to.be.within(200, 299); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:5000/api/v1"
+    },
+    {
+      "key": "nextCursor",
+      "value": ""
+    },
+    {
+      "key": "createdBookId",
+      "value": "11"
+    },
+    {
+      "key": "createdCopyId",
+      "value": ""
+    },
+    {
+      "key": "createdMemberId",
+      "value": ""
+    },
+    {
+      "key": "createdLoanId",
+      "value": ""
+    }
+  ]
+}

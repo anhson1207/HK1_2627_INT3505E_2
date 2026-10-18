@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Book API resource",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "isbn",
+    "publicationYear",
+    "description",
+    "genre",
+    "authors",
+    "totalCopies",
+    "availableCopies",
+    "createdAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "isbn": {
+      "type": "string",
+      "pattern": "^[0-9]{13}$"
+    },
+    "publicationYear": {
+      "type": "integer",
+      "minimum": 1450,
+      "maximum": 2100
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "genre": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "slug"
+      ],
+      "additionalProperties": false
+    },
+    "authors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "role"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "role": {
+            "enum": [
+              "lead",
+              "co",
+              "editor"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "totalCopies": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "availableCopies": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

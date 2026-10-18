@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Loan API resource",
+  "type": "object",
+  "required": [
+    "id",
+    "memberId",
+    "copyId",
+    "borrowedAt",
+    "dueAt",
+    "returnedAt",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "memberId": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "copyId": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "borrowedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dueAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "returnedAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "enum": [
+        "active",
+        "returned"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

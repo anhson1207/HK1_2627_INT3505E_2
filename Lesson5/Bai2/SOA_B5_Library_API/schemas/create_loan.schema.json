@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Create Loan request",
+  "type": "object",
+  "required": [
+    "memberId",
+    "copyId",
+    "dueAt"
+  ],
+  "properties": {
+    "memberId": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "copyId": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "dueAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

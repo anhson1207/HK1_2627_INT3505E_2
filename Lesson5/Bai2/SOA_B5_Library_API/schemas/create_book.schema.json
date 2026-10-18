@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Create Book request",
+  "type": "object",
+  "required": [
+    "title",
+    "isbn",
+    "genreId",
+    "publicationYear"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "isbn": {
+      "type": "string",
+      "pattern": "^[0-9]{13}$"
+    },
+    "genreId": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "publicationYear": {
+      "type": "integer",
+      "minimum": 1450,
+      "maximum": 2100
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 4000
+    }
+  },
+  "additionalProperties": false
+}

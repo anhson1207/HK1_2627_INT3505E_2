@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Add Author to Book request",
+  "type": "object",
+  "required": [
+    "authorId"
+  ],
+  "properties": {
+    "authorId": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "role": {
+      "enum": [
+        "lead",
+        "co",
+        "editor"
+      ]
+    }
+  },
+  "additionalProperties": false
+}
