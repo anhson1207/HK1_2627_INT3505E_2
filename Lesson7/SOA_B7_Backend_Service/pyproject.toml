@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "soa-b7-product-api"
+version = "1.0.0"
+description = "SOA Buoi 7 - Product and Order API with Flask, SQLAlchemy, migrations and Docker"
+requires-python = ">=3.11"
+dependencies = [
+    "Flask>=3.0,<4",
+    "Flask-SQLAlchemy>=3.1,<4",
+    "SQLAlchemy>=2.0,<3",
+    "Flask-Migrate>=4.0,<5",
+    "marshmallow>=3.20,<5",
+    "psycopg[binary]>=3.1,<4",
+    "gunicorn>=21,<26",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

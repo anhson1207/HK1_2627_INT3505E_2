@@ -1,0 +1,60 @@
+
+openapi: 3.0.3
+
+info:
+  title: Product API - Design First
+  version: 1.0.0
+
+paths:
+  /products:
+    get:
+      summary: Lay danh sach san pham
+      operationId: handlers.get_products
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+    post:
+      summary: Them san pham moi
+      operationId: handlers.add_product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - price
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid request
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        price:
+          type: number
