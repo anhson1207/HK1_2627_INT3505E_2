@@ -16,12 +16,8 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/books",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "books"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["books"]
             }
           },
           "event": [
@@ -49,12 +45,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/books",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "books"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["books"]
             },
             "body": {
               "mode": "raw",
@@ -87,13 +79,8 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/books/{{book_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "books",
-                "{{book_id}}"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["books", "{{book_id}}"]
             }
           },
           "event": [
@@ -121,13 +108,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/books/{{book_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "books",
-                "{{book_id}}"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["books", "{{book_id}}"]
             },
             "body": {
               "mode": "raw",
@@ -159,13 +141,8 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/books/{{book_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "books",
-                "{{book_id}}"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["books", "{{book_id}}"]
             }
           },
           "event": [
@@ -207,14 +184,31 @@
             },
             "url": {
               "raw": "{{base_url}}/books",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "books"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["books"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Missing title returns 400\", () => {",
+                  "  pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test(\"Response identifies missing title\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.code).to.be.a(\"string\");",
+                  "  pm.expect(body.message).to.be.a(\"string\");",
+                  "  pm.expect(body.errors).to.be.an(\"array\");",
+                  "  const fields = body.errors.map(e => e.field);",
+                  "  pm.expect(fields).to.include(\"title\");",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "GET /books/9999 — not found",
@@ -223,15 +217,28 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/books/9999",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "books",
-                "9999"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["books", "9999"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Unknown book returns 404\", () => {",
+                  "  pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test(\"Response contains NOT_FOUND\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.code).to.eql(\"NOT_FOUND\");",
+                  "  pm.expect(body.message).to.be.a(\"string\");",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     }
